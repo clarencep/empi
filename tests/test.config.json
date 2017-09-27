@@ -1,0 +1,42 @@
+{
+    "version": "1.0.0",
+    "processes": [
+        {
+            // this is a comment
+            "program": "./tests/test-run",
+            "arguments": ["-t", "100"],
+            "auto_restart": "always",
+            "stop_signal": "SIGQUIT",
+            "stop_wait_secs": 3,
+            "disabled": false
+        },
+        {
+            "program": "/bin/sh",
+            "arguments": ["-c", "echo default user is: && whoami && sleep 100s"],
+            "stdout": "/tmp/default-user.log",
+            "auto_restart": "no"
+        },
+        {
+            "program": "/bin/sh",
+            "arguments": ["-c", "echo root user is: && whoami && sleep 100s"],
+            "stdout": "/tmp/root-user.log",
+            "auto_restart": "no",
+            "user": "root"
+        },
+        {
+            "program": "/bin/sh",
+            "arguments": ["-c", "echo ftp user is: && whoami && sleep 100s"],
+            "stdout": "/tmp/ftp-user.log",
+            "auto_restart": "no",
+            "user": "ftp"
+        },
+        {
+            "program": "/bin/sh",
+            "arguments": ["-c", "echo no_exists user is: && whoami && sleep 100s"],
+            "disabled": true,
+            "auto_restart": "no",
+            "user": "no_exists"
+        }
+    ]
+}
+

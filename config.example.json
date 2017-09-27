@@ -1,0 +1,113 @@
+{
+    "version": "1.0",
+    "processes": [
+        {
+            // [optional] string
+            // name is the name of the process, default is the file basename of program
+            "name": "", 
+
+            // [required] string
+            // program is the file path of an executable. If it is in $PATH, just basename is needed.
+            "program": "uptime",
+
+            // [optional] []string
+            // arguments will be passed to program as commandline arguments
+            // default is empty array - no arguments  
+            "arguments": [],
+
+            // [optional] string, default ""
+            // work_dir is the working directory to run the program.
+            "work_dir": "path/to/the/work_dir",
+
+            // [optional] string: one of "inherit", "null", or a path of a readable file
+            // stdin is the file to fetch the stdin of the process.
+            // "null" means device null (it is /dev/null in linux)
+            // default is "inherit" from EMPI 
+            "stdin": "inherit",
+            
+            // [optional] string: one of "inherit", "null", "&stderr", or a path of a writable file
+            // stdout is the file to store the stdout of the process.
+            // default is "inherit" from EMPI 
+            // "null" means device null (it is /dev/null in linux)
+            // "&stderr" means use the following stderr
+            "stdout": "inherit",
+
+            // [optional] string: one of "inherit", "null", "&stdout", or a path of a writable file
+            // stderr is the file to store the stderr of the process.
+            // default is "inherit" from EMPI 
+            // "null" means device null (it is /dev/null in linux)
+            // "&stdout" means use the above stdout
+            "stderr": "inherit",
+            
+            // [optional] bool: 
+            // append_stdout means to open stdout file in append mode.
+            // default is false 
+            "append_stdout": false,
+
+            // [optional] bool: 
+            // append_stderr means to open stderr file in append mode.
+            // default is false 
+            "append_stderr": false,
+
+            // [optional] []string
+            // env is the additional environment variables 
+            // default is none 
+            "env": [
+                "FOO=bar"
+            ],
+
+            // [optional] string: 
+            // user specifies which user to run the program
+            // default is "", which means inherit from EMPI 
+            "user": "",
+
+            // [optional] string: 
+            // group specifies which group to run the program
+            // default is "", which means inherit from EMPI 
+            "group": "",
+            
+            // [optional] string: 
+            // umask specifies which umask to run the program
+            // default is "", which means inherit from EMPI 
+            "umask": "",
+            
+            // [optional] string: one of "unexpected", "yes", "always", "no" or "never"
+            // - unexpected: only restart when the process stopped with unexpected error code, or within unexpected time.
+            // - yes/always: always restart the program
+            // - no/never:   never restart the program
+            // default is "unexpected" 
+            "auto_restart": "unexpected",
+
+            // [optional] int, default is 0
+            // start_retries is the max retries' times to restart the program
+            // 0 or any value less then 0 means infinite retries times 
+            "start_retries": 0,
+
+            // [optional] float, default is 0
+            // restart_interval_secs seconds will be waitted before restart  
+            "restart_interval_secs": 0,
+
+            // [optional] float, default is 0
+            // the program should run at least min_run_secs seconds. otherwise, it will be considerrated as an unexpected stop.
+            // 0 means don't check it. 
+            "min_run_secs": 0,
+
+            // [optional] []int, default is []
+            // a normal stop's error code should be in exit_codes. otherwise, it will be considerrated as an unexpected stop. 
+            "exit_codes": [0, 2],
+
+            // [optional] string, default is "SIGTERM"
+            // stop_signal will be sent to the process when EMPI is stopping
+            "stop_signal": "SIGTERM",
+
+            // [optional] float, default is 0.1
+            // stop_wait_secs seconds will be waitted after `stop_signal` was sent. 
+            // After that if the process is still running, a "SIGKILL" will be sent
+            "stop_wait_secs": 0.1,
+
+            // [optional] bool, default is false
+            // whether disable this process
+            "disabled": false
+        }
+    ]
+}
