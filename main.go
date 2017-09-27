@@ -104,11 +104,8 @@ func main() {
 	}
 
 	log.Println("begin run...")
-	config.run()
 
-	runtime.Gosched()
-
-	config.wait()
+	config.runAndWait()
 }
 
 func (config *EmpiConfig) checkAndFullFill() {
@@ -127,12 +124,16 @@ func (config *EmpiConfig) run() {
 	}
 }
 
-func (config *EmpiConfig) wait() {
+func (config *EmpiConfig) runAndWait() {
 	// handle signals
 	signals := make(chan os.Signal, 1)
 
+	// setup signals
 	// KILL signal cannot be caught, so just wait these signals:
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM, syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGHUP)
+
+	// run the process!
+	config.run()
 
 	s := <-signals
 	log.Printf("Got signal: %v", s)
