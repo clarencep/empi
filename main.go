@@ -14,6 +14,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"syscall"
 	"time"
@@ -136,22 +137,20 @@ func (config *EmpiConfig) wait() {
 	s := <-signals
 	log.Printf("Got signal: %v", s)
 
-	stops := make(chan bool)
+	stopWaitGroup := sync.WaitGroup{}
 
 	for _, proc := range config.Processes {
 		proc := proc
 		if !proc.Disabled {
+			stopWaitGroup.Add(1)
 			go func() {
-				stops <- proc.stop()
+				defer stopWaitGroup.Done()
+				proc.stop()
 			}()
 		}
 	}
 
-	for _, proc := range config.Processes {
-		if !proc.Disabled {
-			<-stops
-		}
-	}
+	stopWaitGroup.Wait()
 
 	log.Printf("EMPI stopped")
 	os.Exit(0)
